@@ -37,5 +37,21 @@ public class ProvincesTest {
 		String declaration = "Timber";
 		assertEquals("MERGE (:Resource {type:'Timber'})", Parser.createResourceInsert(declaration));
 	}
+	
+	@Test
+	public void testConnectProvincesByLand() {
+		String declaration = "Paris; St.Malo; LAND";
+		assertEquals("MATCH (a:Province {name: 'Paris'}), (b:Province {name: 'St.Malo'})\n"
+				+ "MERGE (a) -[:CONNECT_BY_LAND]-> (b)\n"
+				+ "MERGE (b) -[:CONNECT_BY_LAND]-> (a)\n", Parser.createConnection(declaration));
+	}
+
+	@Test
+	public void testConnectProvincesByCoast() {
+		String declaration = "Paris; London; COAST";
+		assertEquals("MATCH (a:Province {name: 'Paris'}), (b:Province {name: 'London'})\n"
+				+ "MERGE (a) -[:CONNECT_BY_COAST]-> (b)\n"
+				+ "MERGE (b) -[:CONNECT_BY_COAST]-> (a)\n", Parser.createConnection(declaration));
+	}
 
 }

@@ -26,5 +26,16 @@ public class Parser  {
 		return String.format("MERGE (:Resource {type:'%s'})", parts[0]);
 	}
 
+	public static String createConnection(String declaration) {
+		String[] parts = declaration.split(";");
+		StringBuffer matches = new StringBuffer();
+		matches.append(String.format("MATCH (a:Province {name: '%s'}), (b:Province {name: '%s'})\n", parts[0].trim(), parts[1].trim()));
+		StringBuffer merges = new StringBuffer();
+		merges.append(String.format("MERGE (a) -[:CONNECT_BY_%s]-> (b)\n",parts[2].trim()));
+		merges.append(String.format("MERGE (b) -[:CONNECT_BY_%s]-> (a)\n",parts[2].trim()));
+		matches.append(merges);
+		return matches.toString();
+	}
+
 
 }
