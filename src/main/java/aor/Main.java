@@ -23,11 +23,88 @@ public class Main {
 		final String DB_URL = "jdbc:neo4j://localhost:7474/";
 		Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
 
+		long start = System.currentTimeMillis();
+		dropData(con);
+		
 		addResources(con);
-		checkResources(con);
+//		checkResources(con);
 
 		addProvinces(con);
+//		checkProvinces(con);
+
+		addSattelites(con);
 		
+		addRelations(con);
+		System.out.println(String.format("Completed loading data in %f seconds!", (System.currentTimeMillis()-start)/1000f));
+	}
+
+	private static void dropData(Connection con) throws SQLException {
+		System.out.println("Dropping data from database: ");
+		try (Statement stmt = con.createStatement()) {
+			stmt.executeQuery("MATCH (p)-[r2]-() DELETE p,r2");
+		}
+	}
+
+	private static void addRelations(Connection con) {
+		BufferedReader br = null;
+		try {
+			FileReader fr = new FileReader("src/main/resources/Relations.dsl");
+			br = new BufferedReader(fr);
+			while (br.ready()) {
+				String line = br.readLine();
+				Statement stmt = con.createStatement();
+				stmt.executeUpdate(Parser.createConnection(line));
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+
+	private static void addSattelites(Connection con) {
+		BufferedReader br = null;
+		try {
+			FileReader fr = new FileReader("src/main/resources/Sattelites.dsl");
+			br = new BufferedReader(fr);
+			while (br.ready()) {
+				String line = br.readLine();
+				Statement stmt = con.createStatement();
+				stmt.executeUpdate(Parser.createSatteliteConnection(line));
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+
+	}
+
+	private static void checkProvinces(Connection con) throws SQLException {
 		System.out.println("Checking Provinces in database: ");
 		// Querying
 		try (Statement stmt = con.createStatement()) {
