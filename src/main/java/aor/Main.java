@@ -13,10 +13,7 @@ import java.util.stream.Stream;
 
 public class Main {
 
-//	private static final String SRC_MAIN_RESOURCES_DATA = "data/";
-
-	 private static final String SRC_MAIN_RESOURCES_DATA =
-	 "src/main/resources/data/";
+	private static final String SRC_MAIN_RESOURCES_DATA = "data/";
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// Make sure Neo4j Driver is registered
@@ -164,9 +161,12 @@ public class Main {
 		StringBuffer sb = new StringBuffer();
 		BufferedReader br = null;
 		try {
-//			ClassLoader.getSystemResource(SRC_MAIN_RESOURCES_DATA + "Resources.dsl");
-//			URL r = Main.class.getClassLoader().getResource(SRC_MAIN_RESOURCES_DATA+ "Resources.dsl");
-			
+			// ClassLoader.getSystemResource(SRC_MAIN_RESOURCES_DATA +
+			// "Resources.dsl");
+			// URL r =
+			// Main.class.getClassLoader().getResource(SRC_MAIN_RESOURCES_DATA+
+			// "Resources.dsl");
+
 			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Resources.dsl");
 			br = new BufferedReader(fr);
 			Stream<String> content = br.lines();
