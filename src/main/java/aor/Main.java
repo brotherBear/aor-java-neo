@@ -13,6 +13,11 @@ import java.util.stream.Stream;
 
 public class Main {
 
+//	private static final String SRC_MAIN_RESOURCES_DATA = "data/";
+
+	 private static final String SRC_MAIN_RESOURCES_DATA =
+	 "src/main/resources/data/";
+
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// Make sure Neo4j Driver is registered
 		Class.forName("org.neo4j.jdbc.Driver");
@@ -25,17 +30,17 @@ public class Main {
 
 		long start = System.currentTimeMillis();
 		dropData(con);
-		
+
 		addResources(con);
-//		checkResources(con);
+		// checkResources(con);
 
 		addProvinces(con);
-//		checkProvinces(con);
+		// checkProvinces(con);
 
 		addSattelites(con);
-		
+
 		addRelations(con);
-		System.out.println(String.format("Completed loading data in %f seconds!", (System.currentTimeMillis()-start)/1000f));
+		System.out.println(String.format("Completed loading data in %f seconds!", (System.currentTimeMillis() - start) / 1000f));
 	}
 
 	private static void dropData(Connection con) throws SQLException {
@@ -48,7 +53,7 @@ public class Main {
 	private static void addRelations(Connection con) {
 		BufferedReader br = null;
 		try {
-			FileReader fr = new FileReader("src/main/resources/Relations.dsl");
+			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Relations.dsl");
 			br = new BufferedReader(fr);
 			while (br.ready()) {
 				String line = br.readLine();
@@ -77,7 +82,7 @@ public class Main {
 	private static void addSattelites(Connection con) {
 		BufferedReader br = null;
 		try {
-			FileReader fr = new FileReader("src/main/resources/Sattelites.dsl");
+			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Sattelites.dsl");
 			br = new BufferedReader(fr);
 			while (br.ready()) {
 				String line = br.readLine();
@@ -101,7 +106,6 @@ public class Main {
 			}
 		}
 
-
 	}
 
 	private static void checkProvinces(Connection con) throws SQLException {
@@ -115,10 +119,10 @@ public class Main {
 		}
 	}
 
-	private static void addProvinces(Connection con)  {
+	private static void addProvinces(Connection con) {
 		BufferedReader br = null;
 		try {
-			FileReader fr = new FileReader("src/main/resources/Provinces.dsl");
+			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Provinces.dsl");
 			br = new BufferedReader(fr);
 			while (br.ready()) {
 				String line = br.readLine();
@@ -160,7 +164,10 @@ public class Main {
 		StringBuffer sb = new StringBuffer();
 		BufferedReader br = null;
 		try {
-			FileReader fr = new FileReader("src/main/resources/Resources.dsl");
+//			ClassLoader.getSystemResource(SRC_MAIN_RESOURCES_DATA + "Resources.dsl");
+//			URL r = Main.class.getClassLoader().getResource(SRC_MAIN_RESOURCES_DATA+ "Resources.dsl");
+			
+			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Resources.dsl");
 			br = new BufferedReader(fr);
 			Stream<String> content = br.lines();
 			content.forEach(p -> sb.append(Parser.createResourceInsert(p) + "\n"));
