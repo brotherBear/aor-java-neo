@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.stream.Stream;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,8 @@ public class Main {
 	private static final String SRC_MAIN_RESOURCES_DATA = "data/";
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		// Configure logging
+		PropertyConfigurator.configure("log4j.properties");
 		// Make sure Neo4j Driver is registered
 		log.info("Registering driver for database");
 		Class.forName("org.neo4j.jdbc.Driver");
@@ -40,7 +43,7 @@ public class Main {
 		addProvinces(con);
 		// checkProvinces(con);
 
-		addSattelites(con);
+		addSatellites(con);
 
 		addAreas(con);
 
@@ -117,6 +120,7 @@ public class Main {
 	}
 
 	private static void addRelations(Connection con) {
+		log.info("Adding Relations between Provinces to database");
 		BufferedReader br = null;
 		try {
 			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Relations.dsl");
@@ -144,7 +148,8 @@ public class Main {
 
 	}
 
-	private static void addSattelites(Connection con) {
+	private static void addSatellites(Connection con) {
+		log.info("Adding Satellites to database");
 		BufferedReader br = null;
 		try {
 			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Sattelites.dsl");
@@ -174,7 +179,7 @@ public class Main {
 	}
 
 	private static void checkProvinces(Connection con) throws SQLException {
-		System.out.println("Checking Provinces in database: ");
+		log.info("Checking Provinces in database: ");
 		// Querying
 		try (Statement stmt = con.createStatement()) {
 			ResultSet rs = stmt.executeQuery("MATCH (n:Province) RETURN n.name");
@@ -185,6 +190,7 @@ public class Main {
 	}
 
 	private static void addProvinces(Connection con) {
+		log.info("Adding provinces to database");
 		BufferedReader br = null;
 		try {
 			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Provinces.dsl");
@@ -214,7 +220,7 @@ public class Main {
 	}
 
 	private static void checkResources(Connection con) throws SQLException {
-		System.out.println("Checking Resources in database: ");
+		log.info("Checking Resources in database: ");
 		// Querying
 		try (Statement stmt = con.createStatement()) {
 			ResultSet rs = stmt.executeQuery("MATCH (n:Resource) RETURN n.type");
@@ -226,15 +232,10 @@ public class Main {
 	}
 
 	private static void addResources(Connection con) throws SQLException {
+		log.info("Adding Resources to database");
 		StringBuffer sb = new StringBuffer();
 		BufferedReader br = null;
 		try {
-			// ClassLoader.getSystemResource(SRC_MAIN_RESOURCES_DATA +
-			// "Resources.dsl");
-			// URL r =
-			// Main.class.getClassLoader().getResource(SRC_MAIN_RESOURCES_DATA+
-			// "Resources.dsl");
-
 			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Resources.dsl");
 			br = new BufferedReader(fr);
 			Stream<String> content = br.lines();
