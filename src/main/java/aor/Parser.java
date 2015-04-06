@@ -61,4 +61,46 @@ public class Parser {
 		return matches.toString();
 	}
 
+	public static String createArea(String declaration) {
+		String[] parts = declaration.split(";");
+		StringBuffer matches = new StringBuffer("MATCH");
+		StringBuffer merges = new StringBuffer();
+		if (parts.length > 0) {
+			String sat = parts[0].trim();
+			for (int i = 1; i < parts.length; i++) {
+				matches.append(String.format(" (p%d:Province {name: '%s'})", i, parts[i].trim()));
+				if (i+1 < parts.length) {
+					matches.append(",");
+				} else {
+					matches.append("\n");
+				}
+				merges.append(String.format("MERGE (p%d) -[:BELONGS_TO]-> (a)\n", i));
+			}
+			matches.append(String.format("MERGE (a:Area {name: '%s'})\n", sat));
+		}
+		matches.append(merges);
+		return matches.toString();
+	}
+
+	public static String createSea(String declaration) {
+		String[] parts = declaration.split(";");
+		StringBuffer matches = new StringBuffer("MATCH");
+		StringBuffer merges = new StringBuffer();
+		if (parts.length > 0) {
+			String sat = parts[0].trim();
+			for (int i = 1; i < parts.length; i++) {
+				matches.append(String.format(" (p%d:Province {name: '%s'})", i, parts[i].trim()));
+				if (i+1 < parts.length) {
+					matches.append(",");
+				} else {
+					matches.append("\n");
+				}
+				merges.append(String.format("MERGE (p%d) -[:CONNECTS_TO]-> (s)\n", i));
+			}
+			matches.append(String.format("MERGE (s:Sea {name: '%s'})\n", sat));
+		}
+		matches.append(merges);
+		return matches.toString();
+	}
+
 }

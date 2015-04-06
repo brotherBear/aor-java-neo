@@ -11,12 +11,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Main {
 
+	private static Logger log = LoggerFactory.getLogger(Main.class);
 	private static final String SRC_MAIN_RESOURCES_DATA = "data/";
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// Make sure Neo4j Driver is registered
+		log.info("Registering driver for database");
 		Class.forName("org.neo4j.jdbc.Driver");
 
 		// Connect
@@ -28,6 +33,7 @@ public class Main {
 		long start = System.currentTimeMillis();
 		dropData(con);
 
+		log.info("Reading data from '" + SRC_MAIN_RESOURCES_DATA + "' folder");
 		addResources(con);
 		// checkResources(con);
 
@@ -36,12 +42,75 @@ public class Main {
 
 		addSattelites(con);
 
+		addAreas(con);
+
+		addSeas(con);
+
 		addRelations(con);
-		System.out.println(String.format("Completed loading data in %f seconds!", (System.currentTimeMillis() - start) / 1000f));
+		log.info(String.format("Completed loading data in %f seconds!", (System.currentTimeMillis() - start) / 1000f));
+	}
+
+	private static void addSeas(Connection con) {
+		log.info("Adding Seas to database");
+		BufferedReader br = null;
+		try {
+			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Seas.dsl");
+			br = new BufferedReader(fr);
+			while (br.ready()) {
+				String line = br.readLine();
+				Statement stmt = con.createStatement();
+				stmt.executeUpdate(Parser.createSea(line));
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private static void addAreas(Connection con) {
+		log.info("Adding Areas to database");
+		BufferedReader br = null;
+		try {
+			FileReader fr = new FileReader(SRC_MAIN_RESOURCES_DATA + "Areas.dsl");
+			br = new BufferedReader(fr);
+			while (br.ready()) {
+				String line = br.readLine();
+				Statement stmt = con.createStatement();
+				stmt.executeUpdate(Parser.createArea(line));
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 	}
 
 	private static void dropData(Connection con) throws SQLException {
-		System.out.println("Dropping data from database: ");
+		log.info("Dropping data from database: ");
 		try (Statement stmt = con.createStatement()) {
 			stmt.executeQuery("MATCH (p)-[r2]-() DELETE p,r2");
 		}
@@ -57,7 +126,6 @@ public class Main {
 				Statement stmt = con.createStatement();
 				stmt.executeUpdate(Parser.createConnection(line));
 			}
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

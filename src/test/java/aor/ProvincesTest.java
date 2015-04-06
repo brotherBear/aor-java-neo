@@ -30,6 +30,22 @@ public class ProvincesTest {
 	}
 
 	@Test
+	public void testCreateArea() {
+		String declaration = "Area I; Novgorod; Riga; Mitau";
+		assertEquals("MATCH (p1:Province {name: 'Novgorod'}), (p2:Province {name: 'Riga'}), (p3:Province {name: 'Mitau'})\n"
+				+ "MERGE (a:Area {name: 'Area I'})\n" + "MERGE (p1) -[:BELONGS_TO]-> (a)\n" + "MERGE (p2) -[:BELONGS_TO]-> (a)\n"
+				+ "MERGE (p3) -[:BELONGS_TO]-> (a)\n", Parser.createArea(declaration));
+	}
+
+	@Test
+	public void testCreateSea() {
+		String declaration = "Greenland Sea; Edinburg; Shetland Islands; Iceland";
+		assertEquals("MATCH (p1:Province {name: 'Edinburg'}), (p2:Province {name: 'Shetland Islands'}), "
+				+ "(p3:Province {name: 'Iceland'})\n" + "MERGE (s:Sea {name: 'Greenland Sea'})\n" + "MERGE (p1) -[:CONNECTS_TO]-> (s)\n"
+				+ "MERGE (p2) -[:CONNECTS_TO]-> (s)\n" + "MERGE (p3) -[:CONNECTS_TO]-> (s)\n", Parser.createSea(declaration));
+	}
+
+	@Test
 	public void testDeclareTimberResource() {
 		String declaration = "Timber";
 		assertEquals("MERGE (:Resource {type:'Timber'})", Parser.createResourceInsert(declaration));

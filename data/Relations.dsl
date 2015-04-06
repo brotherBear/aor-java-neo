@@ -27,11 +27,9 @@ Leon; Toledo; LAND
 Leon; Lisbon; LAND-COAST
 Lisbon; Toledo; LAND
 Lisbon; Seville; LAND-COAST
-Seville; West Afrcia; SEA
 Seville; Granada; LAND-COAST
 Seville; Toledo; LAND
 Seville; Fez; COAST
-Fez; West Afrcia; SEA
 Fez; Oran; LAND-COAST
 Granada; Fez; COAST
 Granada; Toledo; LAND
@@ -165,8 +163,6 @@ Malmo; Stockholm; LAND-COAST
 Whisby; Stockholm; COAST
 Bergen; Kongsberg; LAND-COAST
 Bergen; Shetland Islands; COAST
-Iceland; Shetland Islands; SEA
-Iceland; Edinburg; SEA
 Edinburg; Armagh; COAST
 Edinburg; Shetland Islands; COAST
 Edinburg; York; LAND-COAST
