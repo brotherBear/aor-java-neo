@@ -7,3 +7,5 @@ dependency-reduced-pom.xml
 *jar
 *log
 *zip
+*pem
+*~
