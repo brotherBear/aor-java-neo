@@ -30,7 +30,7 @@ public class Main {
 		// Connect
 		final String USER = "neo4j";
 		final String PASS = "myneo";
-		final String DB_URL = "jdbc:neo4j://localhost:7474/";
+		final String DB_URL = "jdbc:neo4j://52.17.52.5:7474/";
 		Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
 
 		long start = System.currentTimeMillis();
