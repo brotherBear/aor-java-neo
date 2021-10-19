@@ -29,8 +29,8 @@ public class Main {
 
 		// Connect
 		final String USER = "neo4j";
-		final String PASS = "myneo";
-		final String DB_URL = "jdbc:neo4j://52.17.52.5:7474/";
+		final String PASS = "skuggfisk";
+		final String DB_URL = "jdbc:neo4j://127.0.0.1:7474/";
 		Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
 
 		long start = System.currentTimeMillis();
@@ -64,12 +64,7 @@ public class Main {
 				Statement stmt = con.createStatement();
 				stmt.executeUpdate(Parser.createSea(line));
 			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (br != null) {
@@ -93,12 +88,7 @@ public class Main {
 				Statement stmt = con.createStatement();
 				stmt.executeUpdate(Parser.createArea(line));
 			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (br != null) {
@@ -130,11 +120,7 @@ public class Main {
 				Statement stmt = con.createStatement();
 				stmt.executeUpdate(Parser.createConnection(line));
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e ) {
 			e.printStackTrace();
 		} finally {
 			if (br != null) {
@@ -159,12 +145,7 @@ public class Main {
 				Statement stmt = con.createStatement();
 				stmt.executeUpdate(Parser.createSatteliteConnection(line));
 			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (br != null) {
@@ -200,12 +181,7 @@ public class Main {
 				Statement stmt = con.createStatement();
 				stmt.executeUpdate(Parser.createProvinceInsert(line));
 			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (br != null) {

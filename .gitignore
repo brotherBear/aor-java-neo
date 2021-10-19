@@ -4,6 +4,8 @@
 target/
 /bin/
 dependency-reduced-pom.xml
+*.iml
+.idea/
 *jar
 *log
 *zip
